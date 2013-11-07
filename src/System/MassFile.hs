@@ -23,8 +23,8 @@ newtype NewTime = NewTime {unNewTime :: UTCTime }
 newtype TestTime = TestTime {unTestTime :: UTCTime}
     deriving (Eq,Show)
 
-data MFcfg cmd = MFcfg  { mfName :: FilePath,
-                          mfCmd  :: cmd,
+data MFcfg a = MFcfg  { mfName :: FilePath,
+                          mfCmd  :: FileFcn a,
                           mfOldDate :: OldTime,
                           mfNewDate :: NewTime
                    }
@@ -32,16 +32,16 @@ data MFcfg cmd = MFcfg  { mfName :: FilePath,
 
 
 -- |More lens experiments
-lensMfName :: Lens (MFcfg cmd) (MFcfg cmd) FilePath FilePath 
+lensMfName :: Lens (MFcfg a) (MFcfg a) FilePath FilePath 
 lensMfName f (MFcfg a b c d) = fmap (\a' -> MFcfg a' b c d) (f a)
 
-lensMfCmd :: Lens (MFcfg cmd) (MFcfg cmd) cmd cmd
+lensMfCmd :: Lens (MFcfg a) (MFcfg a) a a
 lensMfCmd f (MFcfg a cmdFcn c d) = fmap (\cmdFcn' -> MFcfg a cmdFcn' c d) (f cmdFcn)
 
 
 
 
-pathTraverseHandler :: (MFcfg (FileFcn a)) -> IO () 
+pathTraverseHandler :: (MFcfg a) -> IO () 
 pathTraverseHandler cfg = do 
   dirContent <- listDirectory (mfName cfg) -- incoming root directory content
   dirlist <- filterM (filterDirsAndRunCMD cfg) dirContent :: IO [FilePath]
@@ -54,7 +54,7 @@ pathTraverseHandler cfg = do
 --   runs the command on it and returns false to take it out of the
 --   list!
 
-filterDirsAndRunCMD :: (MFcfg (FileFcn a) ) -> FilePath -> IO Bool
+filterDirsAndRunCMD :: (MFcfg a) -> FilePath -> IO Bool
 filterDirsAndRunCMD cfg fp = do
     let rangeFilter = (makeRangeFilter (mfOldDate cfg) (mfNewDate cfg))
     ftest <- isFile fp 
@@ -118,7 +118,7 @@ commandAssembler Delete = removeFile
 
 -- | Take in a string, read it and see if it is a valid command If so return that as Either
 -- If not do the other
-testCommand :: String -> Either Text Command
+testCommand :: String -> Either Text (FileFcn ())
 testCommand s = case readMay s of 
                 Nothing -> Left $ append "error parsing " (pack s)
                 Just c -> Right $ commandAssembler c
