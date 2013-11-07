@@ -8,7 +8,9 @@ main :: IO ()
 main = do 
   (MassFileCmdArgs f c o n r) <- runCmdArgs
   eFP <- testFilepath.pack $ f
-  eTO <- testTime o
-  eTN <- testTime n 
-  
+  let eTO = OldTime <$> testTime o
+      eTN = NewTime <$> testTime n 
+  print eTO 
+  print eTN
+  print eFP
   return () 
