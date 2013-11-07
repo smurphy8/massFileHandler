@@ -14,8 +14,7 @@ data Command = List|Delete|Error
 data MassFileCmdArgs = MassFileCmdArgs { rootFilename :: String ,
                                          command  :: Command,
                                          oldDate  :: String,
-                                         newDate  :: String ,
-                                         recursive :: Bool
+                                         newDate  :: String 
                                          } deriving (Show, Data, Typeable)
 
 
@@ -23,7 +22,6 @@ dflt :: MassFileCmdArgs
 dflt = MassFileCmdArgs { rootFilename = "",
                          command = Error,
        oldDate = "noOldDateGiven",
-       newDate = "noNewDateGiven",
-       recursive = True}
+       newDate = "noNewDateGiven"}
        
 runCmdArgs = cmdArgs dflt

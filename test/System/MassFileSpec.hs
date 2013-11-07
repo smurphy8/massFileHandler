@@ -29,5 +29,7 @@ spec = do
      makeRangeFilter (OldTime $ dayStub 0) (NewTime $ dayStub 3 ) (TestTime $ dayStub 2) `shouldBe` True
      makeRangeFilter (OldTime $ dayStub 1) (NewTime $ dayStub 3 ) (TestTime $ dayStub 0) `shouldBe` False
      makeRangeFilter (OldTime $ dayStub 1) (NewTime $ dayStub 3 ) (TestTime $ dayStub 4) `shouldBe` False
-        
+  -- describe "lensMfName" $ do 
+  --   it "should get back what is put in" $ do 
+  --                           (lensMfName 
 
