@@ -1,6 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude,OverloadedStrings #-}
 module System.MassFile where
-
 import ClassyPrelude
 
 import System.MassFile.Internal
@@ -111,9 +110,9 @@ testTimeRange (OldTime o) (NewTime n ) = o < n
 -- | Everything about commands is premised on the idea they are terminal 
 -- It is therefore appropriate to require a () 
 commandAssembler :: Command -> FilePath -> IO ()
-commandAssembler List = print 
-commandAssembler Error = (\_ -> print "Something has gone wrong with your command")
-commandAssembler Delete = removeFile 
+commandAssembler List x = print x
+commandAssembler Error _ = print "Something has gone wrong with your command"
+commandAssembler (Delete) x = print x >> removeFile x
 
 
 -- | Take in a string, read it and see if it is a valid command If so return that as Either

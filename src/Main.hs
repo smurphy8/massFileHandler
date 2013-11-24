@@ -13,7 +13,7 @@ main = do
       eTN = NewTime <$> testTime n 
       eCMD = testCommand c
       eCFG = MFcfg <$> eFP <*> eCMD <*> eTO <*> eTN
-      delayedThing = (\_ -> print "done") :: Text -> IO ()
+      delayedThing = (\_ -> print "done") :: Text -> xIO ()
   print eTO 
   print eTN
   print eFP
